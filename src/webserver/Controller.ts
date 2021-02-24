@@ -1,16 +1,18 @@
 import express, { Router } from "express";
+import {DaoContainer} from "../persistence/dao/Dao";
 
 export default abstract class Controller {
     
     private basePath : string ;
     protected router = express.Router();
+    protected daoContainer : DaoContainer
 
-    constructor(basePath: string){
-        this.basePath = basePath;
-        this.buildAllRequests();
+    constructor(basePath: string, daoContainer :DaoContainer ){
+        this.basePath = basePath; 
+        this.daoContainer = daoContainer;
     }
 
-    protected abstract buildAllRequests() : void; // factory method
+    public abstract buildAllRequests() : void; 
 
     public getPath(): string {
         return this.basePath;

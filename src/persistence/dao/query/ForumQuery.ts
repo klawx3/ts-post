@@ -1,6 +1,6 @@
 export default interface ForumQuery<T> {
     sql : string;
-    column?(data : any) : T;
+    column(data : any) : T;
 }
 
 

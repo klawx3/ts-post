@@ -33,10 +33,11 @@ export default class DaoPostImpl implements DaoPost {
     }
 
     create(post: Post): void {
-        const getAllPostQuery : ForumQuery<Post> = {
-            sql: `INSERT INTO post VALUES (NULL,${post.user_id_fk}, "${post.text}",now());`
+        const getAllPostQuery : ForumQuery<Post | null> = {
+            sql: `INSERT INTO post VALUES (NULL,${post.user_id_fk}, "${post.text}",now());`,
+            column: () => (null),
         }
-        new QueryFactory<Post>(getAllPostQuery,this.con).getNoPromise();
+        new QueryFactory<Post | null>(getAllPostQuery,this.con).getNoPromise();
     }
 
     delete(_object: Post): void {

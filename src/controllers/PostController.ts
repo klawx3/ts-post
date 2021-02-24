@@ -1,32 +1,48 @@
 import express from "express";
-import { DaoPost } from "../persistence/dao/Dao";
+import Post from "../models/Post";
+import {DaoContainer} from "../persistence/dao/Dao";
+
 import Controller from "../webserver/Controller";
 
 export default class PostController extends Controller {
 
-    private static path : string = "/post";
+    private static path: string = "/post";
 
-    private dapPost : DaoPost;
-
-    constructor(daoPost : DaoPost ){
-        super(PostController.path);
-        this.dapPost = daoPost;
+    constructor(daoContainer: DaoContainer) {
+        super(PostController.path, daoContainer);
     }
 
-    protected buildAllRequests() {
+    public buildAllRequests() {
         this.router.get('/', this.getAllPost);
-        this.router.get('/wea', this.getWea);
+        this.router.get('/:postId', this.getOnePost);
     }
 
-    getAllPost = (_request: express.Request, response: express.Response) => {
-        this.dapPost.findAll();
-        response.send("hola poto");
+    private getAllPost = (_request: express.Request, response: express.Response) => {
+        this.daoContainer.daoPost.findAll().then((posts: Array<Post>) => {
+            let jsonPosts = JSON.stringify(posts);
+            response.send(jsonPosts);
+        });
     }
 
-    getWea = (_request: express.Request, response: express.Response) => {
-        response.send("hola caca");
+    private getOnePost = (request: express.Request, response: express.Response) => {
+        const postId: number = Number(request.params.postId);
+        if (isNaN(postId)) {
+            response.status(404).send("mal");
+        } else {
+            this.daoContainer.daoPost.findOne(postId).then((post: Post) => {
+                console.log(post);
+                if(post){
+                    response.send(JSON.stringify(post));
+                }else{
+                    response.status(404).send({error: 'post not found'});
+                }
+                
+            });
+        }
     }
 
-
+    isObjectEmpty(obj:any) {
+        return Object.keys(obj).length === 0;
+    }
 
 }
