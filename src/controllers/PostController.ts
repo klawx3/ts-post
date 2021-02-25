@@ -1,4 +1,5 @@
 import express from "express";
+import HttpException from "../exception/HttpException";
 import Post from "../models/Post";
 import {DaoContainer} from "../persistence/dao/Dao";
 
@@ -24,7 +25,7 @@ export default class PostController extends Controller {
         });
     }
 
-    private getOnePost = (request: express.Request, response: express.Response) => {
+    private getOnePost = (request: express.Request, response: express.Response, next: express.NextFunction) => {
         const postId: number = Number(request.params.postId);
         if (isNaN(postId)) {
             response.status(404).send("mal");
@@ -34,9 +35,8 @@ export default class PostController extends Controller {
                 if(post){
                     response.send(JSON.stringify(post));
                 }else{
-                    response.status(404).send({error: 'post not found'});
+                    next(new HttpException(404,'Post not found xddd'));
                 }
-                
             });
         }
     }

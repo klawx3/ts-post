@@ -37,6 +37,7 @@ const app: App = new App({
     ],
     middleware: [
         new LoggingMiddleware(),
+        new ErrorMiddleware(),
     ],
     port: PORT
 });
