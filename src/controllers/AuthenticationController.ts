@@ -1,6 +1,7 @@
 import express from "express";
 import TokenData from "../authentication/TokenData";
 import generateToken from "../authentication/TokenFactory";
+import WrongCredentialsException from "../exception/WrongCredentialsException";
 import User from "../models/User";
 import {DaoContainer} from "../persistence/dao/Dao";
 import Controller from "../webserver/Controller";
@@ -17,7 +18,7 @@ export default class AuthenticationController extends Controller {
         this.router.post('/login', this.login);
     }
 
-    private login = (_request: express.Request, _response: express.Response) => {
+    private login = (_request: express.Request, _response: express.Response, next : express.NextFunction) => {
         const {username, password} = _request.body;
         const user: User = {
             username: username,
@@ -28,7 +29,7 @@ export default class AuthenticationController extends Controller {
                 const token : TokenData = generateToken(user);
                 _response.send(JSON.stringify(token));
             } else {
-                _response.send("mal");
+                next(new WrongCredentialsException());
             }
         });
     }

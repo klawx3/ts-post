@@ -46,7 +46,7 @@
   ],
   "devDependencies": {
     "@size-limit/preset-small-lib": "^4.9.2",
-    "@types/express": "^4.17.11",
+    "@types/express": "^4.17.7",
     "@types/jsonwebtoken": "^8.5.0",
     "@types/mysql": "^2.15.17",
     "husky": "^5.0.9",

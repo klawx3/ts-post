@@ -16,7 +16,7 @@ import AuthenticationController from "./controllers/AuthenticationController";
 
 const con = mysql.createConnection({
     host: databaseConfig.host,
-    user: databaseConfig.user,
+   user: databaseConfig.user,
     password: databaseConfig.pass,
     database: databaseConfig.db
 });
@@ -37,7 +37,6 @@ const app: App = new App({
     ],
     middleware: [
         new LoggingMiddleware(),
-        new ErrorMiddleware(),
     ],
     port: PORT
 });

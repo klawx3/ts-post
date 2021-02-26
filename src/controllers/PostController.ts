@@ -1,5 +1,6 @@
 import express from "express";
 import HttpException from "../exception/HttpException";
+import AuthenticationMiddleware from "../middleware/AuthenticationMiddleware";
 import Post from "../models/Post";
 import {DaoContainer} from "../persistence/dao/Dao";
 
@@ -9,12 +10,15 @@ export default class PostController extends Controller {
 
     private static path: string = "/post";
 
+    private auth: AuthenticationMiddleware;
+
     constructor(daoContainer: DaoContainer) {
         super(PostController.path, daoContainer);
+        this.auth = new AuthenticationMiddleware(this.daoContainer.daoUser);
     }
 
     public buildAllRequests() {
-        this.router.get('/', this.getAllPost);
+        this.router.get('/',this.auth.getMiddleware(), this.getAllPost);
         this.router.get('/:postId', this.getOnePost);
     }
 
@@ -32,16 +36,17 @@ export default class PostController extends Controller {
         } else {
             this.daoContainer.daoPost.findOne(postId).then((post: Post) => {
                 console.log(post);
-                if(post){
+                if (post) {
                     response.send(JSON.stringify(post));
-                }else{
-                    next(new HttpException(404,'Post not found xddd'));
+                } else {
+                    console.log("en error");
+                    next(new HttpException(404, 'Post not found xddd'));
                 }
             });
         }
     }
 
-    isObjectEmpty(obj:any) {
+    isObjectEmpty(obj: any) {
         return Object.keys(obj).length === 0;
     }
 

@@ -5,11 +5,11 @@ import Middleware from "../webserver/Middleware";
 
 class ErrorMiddleware implements Middleware {
 
-    getMiddleware(): RequestHandler {
+    getMiddleware(): RequestHandler | any {
         return this.errorMiddleware;
     }
 
-    private errorMiddleware = (error: HttpException, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+    private errorMiddleware = (error: HttpException, _req: express.Request, res: express.Response, _next : express.NextFunction) => {
         const status: number = error.status || 500;
         const message: string = error.message || 'Something went wrong';
 

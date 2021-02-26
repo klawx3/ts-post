@@ -1,6 +1,6 @@
 import * as bodyParser from 'body-parser';
 import express from 'express';
-import errorMiddleware from '../middleware/ErrorMiddleware';
+import ErrorMiddleware from '../middleware/ErrorMiddleware';
 import AppConfig from './AppConfig';
 import Controller from './Controller';
 import Middleware from './Middleware';
@@ -38,6 +38,6 @@ export default class App {
     }
 
     private initErrorMiddleware() {
-        this.expressApp.use(errorMiddleware);
+        this.expressApp.use(new ErrorMiddleware().getMiddleware());
     }
 }
