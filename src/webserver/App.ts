@@ -1,4 +1,5 @@
 import * as bodyParser from 'body-parser';
+import cors from 'cors';
 import express from 'express';
 import ErrorMiddleware from '../middleware/ErrorMiddleware';
 import AppConfig from './AppConfig';
@@ -19,6 +20,7 @@ export default class App {
 
     private initMiddleware(middleware: Array<Middleware>) {
         this.expressApp.use(bodyParser.json());
+        this.expressApp.use(cors());
         middleware.forEach(middleware => {
             this.expressApp.use(middleware.getMiddleware());
         });

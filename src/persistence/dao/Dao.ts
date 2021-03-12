@@ -11,6 +11,8 @@ export interface DaoPost extends GenericCrud<Post, number> {}
 
 export interface DaoUser extends GenericCrud<User, number> {
     isValid(user: User): Promise<User>
+    userExistsById(id : number): Promise<boolean>
+    userExistsByUsername(username : string): Promise<boolean>
 }
 
 

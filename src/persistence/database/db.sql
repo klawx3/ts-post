@@ -1,4 +1,5 @@
 DROP DATABASE IF EXISTS post;
+
 CREATE DATABASE post;
 
 USE post;
@@ -11,6 +12,8 @@ CREATE TABLE user (
     PRIMARY KEY(id),
     UNIQUE(username)
 );
+
+
 
 CREATE TABLE post (
     id INT AUTO_INCREMENT,

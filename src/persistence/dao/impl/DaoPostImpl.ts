@@ -41,11 +41,19 @@ export default class DaoPostImpl implements DaoPost {
     }
 
     delete(_object: Post): void {
-        throw new Error("Method not implemented.");
+        const deletePost : ForumQuery<null> = {
+            sql: `DELETE FROM post WHERE id = '${_object.id}'`,
+            column: () => (null),
+        }
+        new QueryFactory<null>(deletePost,this.con).getNoPromise();
     }
 
-    modify(_object: Post, _id: number): void {
-        throw new Error("Method not implemented.");
+    modify(post: Post, _id: number): void {
+        const deletePost : ForumQuery<null> = {
+            sql: `UPDATE post SET user_id_fk = ${post.user_id_fk}, text = '${post.text}' WHERE id = ${_id}`,
+            column: () => (null),
+        }
+        new QueryFactory<null>(deletePost,this.con).getNoPromise();
     }
 
     

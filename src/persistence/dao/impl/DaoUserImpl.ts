@@ -12,6 +12,22 @@ export default class DaoUserImpl implements DaoUser {
         this.con = con;
     }
 
+    userExistsByUsername(username : string): Promise<boolean>{
+        const isValidUser: ForumQuery<boolean> = {
+            sql: `SELECT COUNT(*) as 'EXISTS' FROM user WHERE username = '${username}'`,
+            column: (data) => (data["EXISTS"] == 1)
+        }
+        return new QueryFactory<boolean>(isValidUser, this.con).getSinglePromise();
+    }
+
+    userExistsById(id: number): Promise<boolean> {
+        const isValidUser: ForumQuery<boolean> = {
+            sql: `SELECT COUNT(*) as 'EXISTS' FROM user WHERE id = '${id}'`,
+            column: (data) => (data["EXISTS"] == 1)
+        }
+        return new QueryFactory<boolean>(isValidUser, this.con).getSinglePromise();
+    }
+
     isValid(user: User): Promise<User> {
         const isValidUser: ForumQuery<User> = {
             sql: `SELECT * FROM user WHERE username = '${user.username}' AND passwd = SHA2('${user.password}',0)`,
@@ -35,9 +51,12 @@ export default class DaoUserImpl implements DaoUser {
         }
         return new QueryFactory<User>(findAllUsers, this.con).getArrayPromise();
     }
-
-    create(__object: User): void {
-        throw new Error("Method not implemented.");
+    create(user: User): void {
+        const findAllUsers: ForumQuery<null> = {
+            sql: `INSERT INTO user VALUES (NULL,'${user.username}',SHA2('${user.password}',0))`,
+            column: () => (null)
+        }
+        return new QueryFactory<null>(findAllUsers, this.con).getNoPromise();
     }
 
     delete(_object: User): void {
